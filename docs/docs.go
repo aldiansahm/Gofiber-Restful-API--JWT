@@ -24,14 +24,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/book": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Update book.",
+        "/book": {
+			"get": {
                 "consumes": [
                     "application/json"
                 ],
@@ -41,59 +35,15 @@ const docTemplate = `{
                 "tags": [
                     "Book"
                 ],
-                "summary": "update book",
-                "parameters": [
-                    {
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Title",
-                        "name": "title",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Author",
-                        "name": "author",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Book status",
-                        "name": "book_status",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "Book attributes",
-                        "name": "book_attrs",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.BookAttrs"
-                        }
-                    }
-                ],
+                "summary": "Get all books",
                 "responses": {
-                    "201": {
-                        "description": "ok",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Book"
+                            }
                         }
                     }
                 }
@@ -104,7 +54,6 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create a new book.",
                 "consumes": [
                     "application/json"
                 ],
@@ -117,30 +66,12 @@ const docTemplate = `{
                 "summary": "create a new book",
                 "parameters": [
                     {
-                        "description": "Title",
-                        "name": "title",
+                        "description": "Request",
+                        "name": "Request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Author",
-                        "name": "author",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Book attributes",
-                        "name": "book_attrs",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.BookAttrs"
+                            "$ref": "#/exampleRequest/models.Book"
                         }
                     }
                 ],
@@ -148,110 +79,16 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Book"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete book by given ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Book"
-                ],
-                "summary": "delete book by given ID",
-                "parameters": [
-                    {
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/exampleRequest/models.Book"
                         }
                     }
                 }
             }
         },
-        "/v1/book/{id}": {
-            "get": {
-                "description": "Get book by given ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Book"
-                ],
-                "summary": "get book by given ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Book"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/books": {
-            "get": {
-                "description": "Get all exists books.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Books"
-                ],
-                "summary": "get all exists books",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Book"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/token/new": {
-            "get": {
-                "description": "Create a new access token.",
+
+        "/auth": {
+            "post": {
+                "description": "Get Token.",
                 "consumes": [
                     "application/json"
                 ],
@@ -261,7 +98,18 @@ const docTemplate = `{
                 "tags": [
                     "Token"
                 ],
-                "summary": "create a new access token",
+                "summary": "get token",
+				"parameters": [
+                    {
+                        "description": "Request",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/exampleRequest/models.Auth"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -278,58 +126,109 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "author",
-                "book_attrs",
-                "book_status",
+                "description",
+                "rating",
                 "id",
-                "title",
-                "user_id"
+                "title"
             ],
             "properties": {
+				"id": {
+                    "type": "integer"
+                },
+				"title": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+				"description": {
+                    "type": "string"
+                },
                 "author": {
                     "type": "string",
                     "maxLength": 255
                 },
-                "book_attrs": {
-                    "$ref": "#/definitions/models.BookAttrs"
-                },
-                "book_status": {
-                    "type": "integer"
-                },
-                "created_at": {
+				"created_at": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string",
-                    "maxLength": 255
                 },
                 "updated_at": {
                     "type": "string"
                 },
-                "user_id": {
-                    "type": "string"
+                "rating": {
+                    "$ref": "#/definitions/models.BookRating"
                 }
             }
         },
-        "models.BookAttrs": {
+        "models.BookRating": {
             "type": "object",
             "properties": {
-                "description": {
-                    "type": "string"
+				"id": {
+                    "type": "integer"
+                },
+				"id_buku": {
+                    "type": "integer"
                 },
                 "picture": {
                     "type": "string"
                 },
+                "description": {
+                    "type": "string"
+                },
                 "rating": {
                     "type": "integer",
-                    "maximum": 10,
+                    "maximum": 5,
                     "minimum": 1
                 }
             }
         }
     },
+	"exampleRequest": {
+		"models.Book": {
+            "type": "object",
+            "required": [
+                "title",
+                "description",
+				"author"
+            ],
+            "properties": {
+				"title": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+				"description": {
+                    "type": "string"
+                },
+                "author": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            }
+        },
+		"models.Book.Delete": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+				"id": {
+                    "type": "integer"
+                }
+            }
+        },
+		"models.Auth": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+				"email": {
+                    "type": "string"
+                },
+				"password": {
+                    "type": "string"
+                }
+            }
+        }
+	},
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",

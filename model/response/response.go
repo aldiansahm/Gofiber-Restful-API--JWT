@@ -1,7 +1,5 @@
 package response
 
-import "time"
-
 type Response struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
@@ -9,12 +7,8 @@ type Response struct {
 	Data    interface{}
 }
 
-type Book struct {
-	Id          uint64
-	Title       string
-	Description string
-	Author      string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	Rating      interface{}
+type ErrorResponse struct {
+	FailedField string
+	Tag         string
+	Error       string
 }

@@ -1,9 +1,8 @@
-package BookController
+package book_controller
 
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/aldiansahm7654/go-restapi-fiber/config/database"
 	"github.com/aldiansahm7654/go-restapi-fiber/helper"
 	"github.com/aldiansahm7654/go-restapi-fiber/model/entity"
@@ -16,13 +15,12 @@ import (
 
 func Index(c *fiber.Ctx) error {
 
-	claims, err := helper.ExtractTokenMetadata(c, "admin")
-	if err != nil {
-		// Return status 500 and JWT parse error.
-		res := helper.GetResponse(500, nil, err)
-		return c.Status(res.Status).JSON(res)
-	}
-	fmt.Println(claims)
+	//claims jwt and set protected Role user
+	//claims, err := helper.ExtractTokenMetadata(c, "admin")
+	//if err != nil {
+	//	res := helper.GetResponse(500, nil, err)
+	//	return c.Status(res.Status).JSON(res)
+	//}
 
 	var books []response.Book
 	var book response.Book
@@ -90,7 +88,7 @@ func Create(c *fiber.Ctx) error {
 
 	data := entity.Book{
 		Title:       req.Title,
-		Description: req.Author,
+		Description: req.Description,
 		Author:      req.Author,
 	}
 

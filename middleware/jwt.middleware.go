@@ -23,7 +23,7 @@ func jwtError(c *fiber.Ctx, err error) error {
 	if err.Error() == "Missing or malformed JWT" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
-			"msg":   err.Error(),
+			"msg":   "Unauthorized",
 		})
 	}
 
